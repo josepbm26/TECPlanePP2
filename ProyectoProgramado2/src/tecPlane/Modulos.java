@@ -37,6 +37,21 @@ public class Modulos extends JFrame {
 	private LQueue colaOros;
 	private LQueue colaEconomicos;
 	
+	//Creacion de lista de vuelos
+	String listaVuelos[] = {"Costa Rica","Brasil","Panama","Chile","Egipto","Marruecos","Turquia","China","Rusia","Paraguay","Uruguay","Belice","Ghana","Belgica","Australia",
+			"Vietnam","Laos","Austria","Tailandia","Taiwan","Holanda","Monaco","Colombia","Argentina","Croacia","Suiza","Serbia","Israel","Nigeria","Libia","Francia","Polonia",
+			"Ecuador","Venezuela","Nicaragua","Mexico","Guatemala","Honduras","Jamaica","Bolivia","Italia","Noruega","Irlanda","Inglaterra","Gales","Suecia","Japon","Corea del Sur"};
+	
+	//Metodo para agregar vuelos a los comboBox
+	public void agregarVuelos(JComboBox<Object> comboBox) {
+		int indice = 0;
+		while (indice < listaVuelos.length) {
+			comboBox.addItem(listaVuelos[indice]);
+			indice++;
+		}
+	}
+	
+
 	public Modulos() {
 		//instanciando las colas de los pasajeros
 		colaGeneralPasajeros = new LQueue();
@@ -127,6 +142,7 @@ public class Modulos extends JFrame {
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(475, 111, 132, 17);
 		contentPane.add(comboBox);
+		agregarVuelos(comboBox);
 		
 		JButton btnAtender = new JButton("Atender");
 		btnAtender.setBounds(499, 185, 89, 23);
@@ -139,10 +155,12 @@ public class Modulos extends JFrame {
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(783, 111, 132, 17);
 		contentPane.add(comboBox_1);
+		agregarVuelos(comboBox_1);
 		
 		JComboBox comboBox_2 = new JComboBox();
 		comboBox_2.setBounds(212, 402, 132, 17);
 		contentPane.add(comboBox_2);
+		agregarVuelos(comboBox_2);
 		
 		JButton button_1 = new JButton("Atender");
 		button_1.setBounds(236, 476, 89, 23);
