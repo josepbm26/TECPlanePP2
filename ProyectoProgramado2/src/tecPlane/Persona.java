@@ -79,7 +79,7 @@ public class Persona {
 
 	public String toString() {
 		return "nombre= " + nombre + "\n fechaNacimiento= " + fechaNacimiento + "\n nacionalidad= " + nacionalidad
-				+ "\n lugarOrigen= " + lugarOrigen + "\n lugarDestino= " + lugarDestino + "\n numeroPasaporte= "
+				+ "\n lugarOrigen= " + lugarOrigen + "\n lugarDestino= " + lugarDestino + "\n tipoUsuario= "+ tipoUsuario +"\n numeroPasaporte= "
 				+ numeroPasaporte + "\n";
 	}
 	

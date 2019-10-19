@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class Modulos extends JFrame {
 
@@ -27,7 +28,6 @@ public class Modulos extends JFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
-	private JTextField textField_5;
 	private JTextField textField_6;
 	
 	//creando las colas
@@ -157,6 +157,11 @@ public class Modulos extends JFrame {
 		contentPane.add(list_3);
 		
 		JButton btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnSalir.setBounds(811, 620, 89, 23);
 		contentPane.add(btnSalir);
 		
@@ -180,15 +185,15 @@ public class Modulos extends JFrame {
 		textField_4.setBounds(141, 211, 132, 20);
 		contentPane.add(textField_4);
 		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(141, 236, 132, 20);
-		contentPane.add(textField_5);
-		
 		textField_6 = new JTextField();
 		textField_6.setColumns(10);
 		textField_6.setBounds(141, 261, 132, 20);
 		contentPane.add(textField_6);
+	
+		JComboBox comboBox_3 = new JComboBox();
+		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"(tipo)", "Economico", "Oro", "Platino", "Preferencial"}));
+		comboBox_3.setBounds(141, 235, 132, 22);
+		contentPane.add(comboBox_3);
 		
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
@@ -200,23 +205,23 @@ public class Modulos extends JFrame {
 				String nacionalidad = textField_2.getText();
 				String lugarOrigen = textField_3.getText();
 				String lugarDestino = textField_4.getText();
-				String tipoUsuario = textField_5.getText();
+				String tipoUsuario = String.valueOf(comboBox_3.getSelectedItem());
 				int pasaporte = Integer.parseInt(textField_6.getText());
 				
 				//crenado el pasajero
 				Persona persona = new Persona(nombre,fechaNacimiento,nacionalidad,lugarOrigen,lugarDestino,tipoUsuario,pasaporte);
-				
+
 				//filtrando al pasajero
-				if (tipoUsuario == "Preferencial" || tipoUsuario == "preferencial") {
+				if (tipoUsuario == "Preferencial") {
 					colaPreferenciales.enqueue(persona);
 				}
-				else if (tipoUsuario == "Platino" || tipoUsuario == "platino") {
+				else if (tipoUsuario == "Platino") {
 					colaPlatinos.enqueue(persona);
 				}
-				else if(tipoUsuario == "Oro" || tipoUsuario == "oro") {
+				else if(tipoUsuario == "Oro") {
 					colaOros.enqueue(persona);
 				}
-				else if (tipoUsuario == "Economico" || tipoUsuario == "economico"){
+				else if (tipoUsuario == "Economico"){
 					colaEconomicos.enqueue(persona);
 				}
 
@@ -232,7 +237,6 @@ public class Modulos extends JFrame {
 		});
 		btnAgregar.setBounds(151, 292, 89, 23);
 		contentPane.add(btnAgregar);
-		
 		
 	}
 }
