@@ -4,7 +4,9 @@ public interface TipoEstructuras {
 	
 	//Todavia no se que metodos son los que comparten
 	
-	public void insertar();
+	public void insertar(Object element);
 	
-	public void eliminar();
+	public void busqueda();
+	
+	public Node eliminar();
 }

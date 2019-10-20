@@ -4,10 +4,11 @@ public class Persona {
 	
 	//Atributos de la clase
 	
-	String nombre, fechaNacimiento, nacionalidad, lugarOrigen, lugarDestino, tipoUsuario;
-	int numeroPasaporte;
+	private String nombre, fechaNacimiento, nacionalidad, lugarOrigen, lugarDestino, tipoUsuario;
+	private int numeroPasaporte;
+	private boolean preferencial=false;
 	
-	public Persona (String nombre, String fechaNacimiento, String nacionalidad, String lugarOrigen, String lugarDestino, String tipoUsuario, int numeroPasaporte) {
+	public Persona (String nombre, String fechaNacimiento, String nacionalidad, String lugarOrigen, String lugarDestino, String tipoUsuario, int numeroPasaporte, boolean preferencial) {
 		setNombre(nombre);
 		setFechaNacimiento(fechaNacimiento);
 		setNacionalidad(nacionalidad);
@@ -15,6 +16,7 @@ public class Persona {
 		setLugarDestino(lugarDestino);
 		setTipoUsuario(tipoUsuario);
 		setNumeroPasaporte(numeroPasaporte);
+		setPreferencial(preferencial);
 	}//Constructor
 	
 	//Metodos set y gets de la clase
@@ -68,7 +70,13 @@ public class Persona {
 		this.tipoUsuario = tipoUsuario;
 	}
 	
-
+	public boolean getPreferencial() {
+		return preferencial;
+	}
+	public void setPreferencial(boolean preferencial) {
+		this.preferencial=preferencial;
+	}
+	
 	public int getNumeroPasaporte() {
 		return numeroPasaporte;
 	}
@@ -80,7 +88,7 @@ public class Persona {
 	public String toString() {
 		return "nombre= " + nombre + "\n fechaNacimiento= " + fechaNacimiento + "\n nacionalidad= " + nacionalidad
 				+ "\n lugarOrigen= " + lugarOrigen + "\n lugarDestino= " + lugarDestino + "\n tipoUsuario= "+ tipoUsuario +"\n numeroPasaporte= "
-				+ numeroPasaporte + "\n";
+				+ numeroPasaporte + "\n Preferencial= " + preferencial+ "\n";
 	}
 	
 }//fin de la clase

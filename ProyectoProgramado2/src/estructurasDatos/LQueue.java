@@ -4,7 +4,7 @@ import tecPlane.Persona;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-public class LQueue {
+public class LQueue implements TipoEstructuras {
 	
 	private Node front;
 	private Node rear;
@@ -16,12 +16,12 @@ public class LQueue {
 		this.size = 0;
 	}
 	
-	public void enqueue(Object element){
+	public void insertar(Object element){
 		this.rear.setNext(new Node(element, null));
 		this.rear = rear.getNext();
 		this.size++;
 	}
-	public Node dequeue(){
+	public Node eliminar(){
 		if(this.size == 0){
 			System.out.println("Queue is empty");
 			return null;
@@ -55,7 +55,7 @@ public class LQueue {
 	}
 	
 	public String toString(){
-		String result = "**LQueue**\n";
+		String result = "";
 		Node tFront = this.front;
 		int tSize = this.size;
 		while(tSize != 0){
@@ -78,6 +78,11 @@ public class LQueue {
 			
 		}
 		lista.setModel(listaModel);
+		
+	}
+
+	public void busqueda() {
+		// TODO Auto-generated method stub
 		
 	}
 
