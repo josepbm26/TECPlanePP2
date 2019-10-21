@@ -168,24 +168,40 @@ public class ConfiguracionInicial {
 				LQueue colaPlatinos=new LQueue();
 				LQueue colaOros=new LQueue();
 				LQueue colaEconomicos=new LQueue();
+				Puertas puertasPreferenciales[] = new Puertas[99];
+				Puertas puertasPlatinos[] = new Puertas[99];
+				Puertas puertasOro[] = new Puertas[99];
+				Puertas puertasEconomicos[] = new Puertas[99];
 				Persona persona1 = new Persona("Andres Barahona", "21/01/1995", "Noruego", "Inglaterra", "Costa Rica", "Oro", 8080475, true);
+				Puertas vuelo1=new Puertas("Costa Rica","DC0");
 				Persona persona2 = new Persona("Andres Gutierrez", "27/05/1997", "Africano", "China", "Brasil", "Platino", 4045654,false);
+				Puertas vuelo2=new Puertas("Brasil","PV0");
 				Persona persona3 = new Persona("Jose Barrantes", "26/09/2000", "Costarricense", "Estados Unidos", "Panama", "Oro", 855515,true);
+				Puertas vuelo3=new Puertas("Panama","DV1");
 				Persona persona4 = new Persona("Pedro Salas", "27/12/1987", "Chino", "China", "Panama", "Platino", 787514,false);
+				Puertas vuelo4=new Puertas("Panama","PC1");
 				Persona persona5 = new Persona("Ana Solis", "4/05/1992", "Mexicana", "Mexico", "Chile", "Economico", 1212154,false);
+				Puertas vuelo5=new Puertas("Chile","EP0");
 				colaOros.insertar(persona1);
+				puertasOro[0]=vuelo1;
 				colaPreferenciales.insertar(persona1);
+				puertasPreferenciales[0]=vuelo1;
 				colaPlatinos.insertar(persona2);
+				puertasPlatinos[0]=vuelo2;
 				colaOros.insertar(persona3);
+				puertasOro[1]=vuelo3;
 				colaPreferenciales.insertar(persona3);
+				puertasPreferenciales[1]=vuelo3;
 				colaPlatinos.insertar(persona4);
+				puertasPlatinos[1]=vuelo4;
 				colaEconomicos.insertar(persona5);
+				puertasEconomicos[0]=vuelo5;
 				
 				//Creacion de arreglo que contiene cantidad de puertas
 				JTextField cantidadPuertas[] = {textField,textField_1,textField_2};
 				
 				//creando la ventan de los modulos
-				Modulos ventana = new Modulos(colaPreferenciales,colaPlatinos,colaOros,colaEconomicos,cantidadPuertas);
+				Modulos ventana = new Modulos(colaPreferenciales,colaPlatinos,colaOros,colaEconomicos,cantidadPuertas,puertasPreferenciales,puertasPlatinos,puertasOro,puertasEconomicos);
 				frame.dispose();
 				ventana.setVisible(true);
 			}

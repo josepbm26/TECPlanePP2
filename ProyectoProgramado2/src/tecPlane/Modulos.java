@@ -1,7 +1,6 @@
 package tecPlane;
 
 import estructurasDatos.LQueue;
-import tecPlane.ConfiguracionInicial;
 
 import java.util.Random;
 import java.awt.BorderLayout;
@@ -38,8 +37,13 @@ public class Modulos extends JFrame {
 			"Vietnam","Laos","Austria","Tailandia","Taiwan","Holanda","Monaco","Colombia","Argentina","Croacia","Suiza","Serbia","Israel","Nigeria","Libia","Francia","Polonia",
 			"Ecuador","Venezuela","Nicaragua","Mexico","Guatemala","Honduras","Jamaica","Bolivia","Italia","Noruega","Irlanda","Inglaterra","Gales","Suecia","Japon","Corea del Sur"};
 	
+	//Cantidad de asientos en los vuelos separados por tipo de usuario
+	static int contadorPreferencial=2;
+	static int contadorPlatino=2;
+	static int contadorOro=2;
+	static int contadorEconomico=1;
 
-	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas) {
+	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales, Puertas[] puertasPlatinos, Puertas[] puertasOro, Puertas[] puertasEconomicos) {
 		//instanciando las colas de los pasajeros
 		colaGeneralPasajeros = new LQueue();
 		
@@ -244,23 +248,54 @@ public class Modulos extends JFrame {
 				
 				//creando el pasajero
 				Persona persona = new Persona(nombre,fechaNacimiento,nacionalidad,lugarOrigen,lugarDestino,tipoUsuario,pasaporte,esPreferencial);
+				//Generando el asiento del pasajero
+				String [] asientos= {"V","C","P"};//Ventana,centro,pasillo
+				int numeroRan=numeroAleatorio.nextInt(asientos.length);
+				String numeroAsiento="";
+				Puertas vuelo = new Puertas(lugarDestino,numeroAsiento);
 
 				//filtrando al pasajero
 				if (esPreferencial == true) {
 					colaPreferenciales.insertar(persona);
+					//generacion de asiento para preferenciales "D"
+					numeroAsiento="D"+asientos[numeroRan]+String.valueOf(contadorPreferencial);
+					vuelo.setNumeroAsiento(numeroAsiento);
+					puertasPreferenciales[contadorPreferencial]=vuelo;
+					contadorPreferencial++;
 				}
 				if (tipoUsuario == "Platino") {
 					colaPlatinos.insertar(persona);
+					if(esPreferencial==false) {
+						//generacion de asiento para platinos "P"
+						numeroAsiento="P"+asientos[numeroRan]+String.valueOf(contadorPlatino);
+						vuelo.setNumeroAsiento(numeroAsiento);
+						puertasPreferenciales[contadorPlatino]=vuelo;
+						contadorPlatino++;
+					}
 				}
 				else if(tipoUsuario == "Oro") {
 					colaOros.insertar(persona);
+					if(esPreferencial==false) {
+						//generacion de asiento para oro "O"
+						numeroAsiento="O"+asientos[numeroRan]+String.valueOf(contadorOro);
+						vuelo.setNumeroAsiento(numeroAsiento);
+						puertasPreferenciales[contadorOro]=vuelo;
+						contadorOro++;
+					}
 				}
 				else if (tipoUsuario == "Economico"){
 					colaEconomicos.insertar(persona);
+					if(esPreferencial==false) {
+						//generacion de asiento para economicos "E"
+						numeroAsiento="E"+asientos[numeroRan]+String.valueOf(contadorEconomico);
+						vuelo.setNumeroAsiento(numeroAsiento);
+						puertasPreferenciales[contadorEconomico]=vuelo;
+						contadorEconomico++;
+					}
 				}
 
 				//mensaje de que se anadio el pasajero a la cola
-				JOptionPane.showMessageDialog(null, "Datos Ingresados satisfactoriamente!");
+				JOptionPane.showMessageDialog(null, "Datos Ingresados satisfactoriamente!" + "\n Su numero de asientos es: " +numeroAsiento);
 				
 				//PARTE ACTUALIZANDO LAS PUERTAS
 				colaOros.meterSubColaEnListbox(list);
