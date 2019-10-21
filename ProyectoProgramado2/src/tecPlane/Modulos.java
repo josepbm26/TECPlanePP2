@@ -249,7 +249,7 @@ public class Modulos extends JFrame {
 				if (esPreferencial == true) {
 					colaPreferenciales.insertar(persona);
 				}
-				else if (tipoUsuario == "Platino") {
+				if (tipoUsuario == "Platino") {
 					colaPlatinos.insertar(persona);
 				}
 				else if(tipoUsuario == "Oro") {
@@ -280,6 +280,56 @@ public class Modulos extends JFrame {
 		});
 		btnVerInfo.setBounds(499, 235, 89, 23);
 		contentPane.add(btnVerInfo);
+		
+		JButton btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//PUERTA DE OROS
+				
+				//agarrando el destino escogido en la ombobox				
+				String destino = String.valueOf(comboBox.getSelectedItem());
+				
+				//usando el metodo de actualizar la puerta de la LQueue				
+				colaOros.actualizarPuerta(list, destino);
+			}
+		});
+		btnActualizar.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnActualizar.setBounds(499, 135, 89, 23);
+		contentPane.add(btnActualizar);
+		
+		JButton btnActualizar_1 = new JButton("Actualizar");
+		btnActualizar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//PUERTA DE Platinos
+				
+				//agarrando el destino escogido en la ombobox
+				String destino = String.valueOf(comboBox_1.getSelectedItem());
+				
+				//usando el metodo de actualizar la puerta de la LQueue
+				colaPlatinos.actualizarPuerta(list_1, destino);
+				
+			}
+		});
+		btnActualizar_1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnActualizar_1.setBounds(811, 135, 89, 23);
+		contentPane.add(btnActualizar_1);
+		
+		JButton btnActualizar_2 = new JButton("Actualizar");
+		btnActualizar_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//PUERTA DE PREERENCIALES
+				
+				//agarrando el destino escogido en la ombobox
+				String destino = String.valueOf(comboBox_2.getSelectedItem());
+				
+				//usando el metodo de actualizar la puerta de la LQueue
+				colaPreferenciales.actualizarPuerta(list_2, destino);
+				
+			}
+		});
+		btnActualizar_2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnActualizar_2.setBounds(236, 430, 89, 23);
+		contentPane.add(btnActualizar_2);
 		
 		
 	}

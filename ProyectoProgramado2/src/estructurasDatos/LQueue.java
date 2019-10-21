@@ -85,5 +85,22 @@ public class LQueue implements TipoEstructuras {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void actualizarPuerta(JList puerta, String u_destino) {
+		//creando la lista que se va a meter dentro de la listbox (necesario)
+		DefaultListModel listaModel = new DefaultListModel();
+		//recorriendo la lista por destino
+		Node temp = this.front.getNext();
+		while (temp != null) {
+			Persona pasajero = (Persona)temp.getElement();
+			String destino = pasajero.getLugarDestino();
+			if (destino == u_destino) {
+				listaModel.addElement(pasajero.getNombre());
+			}
+			temp = temp.getNext();
+		}
+		puerta.setModel(listaModel);
+	
+	}
 
 }
