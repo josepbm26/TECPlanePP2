@@ -366,6 +366,16 @@ public class Modulos extends JFrame {
 		btnActualizar_2.setBounds(236, 430, 89, 23);
 		contentPane.add(btnActualizar_2);
 		
+		JButton btnAdministrarTecPlane = new JButton("Administrar TEC Plane");
+		btnAdministrarTecPlane.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Administracion ventana = new Administracion(listaVuelos,listaPuertas);
+				ventana.setVisible(true);
+			}
+		});
+		btnAdministrarTecPlane.setBounds(286, 604, 179, 23);
+		contentPane.add(btnAdministrarTecPlane);
+		
 		
 	}
 	
