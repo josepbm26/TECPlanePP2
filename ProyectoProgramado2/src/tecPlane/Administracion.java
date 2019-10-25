@@ -167,6 +167,21 @@ public class Administracion extends JFrame {
 		contentPane.add(lblSeleccioneElTipo_1);
 		
 		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comboBox_1.removeAllItems();
+				String tipoUsuario = String.valueOf(comboBox_2.getSelectedItem());
+				if (tipoUsuario=="Oro") {
+					agregarVuelos(comboBox_1,listaVuelos,listaPuertas,0);
+				}
+				else if(tipoUsuario=="Platino") {
+					agregarVuelos(comboBox_1,listaVuelos,listaPuertas,1);
+				}
+				else if(tipoUsuario=="Preferencial") {
+					agregarVuelos(comboBox_1,listaVuelos,listaPuertas,2);
+				}
+			}
+		});
 		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Oro", "Platino", "Preferencial"}));
 		comboBox_2.setBounds(21, 184, 133, 22);
 		contentPane.add(comboBox_2);
@@ -191,7 +206,7 @@ public class Administracion extends JFrame {
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "¡Se ha modificado la cantidad de puertas satisfactoriamente!\nFavor revisar");
+				JOptionPane.showMessageDialog(null, "ï¿½Se ha modificado la cantidad de puertas satisfactoriamente!\nFavor revisar");
 			}
 		});
 		btnModificar.setBounds(398, 159, 109, 23);
@@ -209,7 +224,7 @@ public class Administracion extends JFrame {
 		JButton btnModificar_1 = new JButton("Modificar");
 		btnModificar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "¡Se ha modificado la cantidad de puertas satisfactoriamente!\nFavor revisar");
+				JOptionPane.showMessageDialog(null, "ï¿½Se ha modificado la cantidad de puertas satisfactoriamente!\nFavor revisar");
 			}
 		});
 		btnModificar_1.setBounds(398, 280, 109, 23);
@@ -223,29 +238,9 @@ public class Administracion extends JFrame {
 		});
 		btnRegresar.setBounds(10, 391, 89, 23);
 		contentPane.add(btnRegresar);
-		
-		JButton btnActualizar = new JButton("Actualizar");
-		btnActualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//extrayendo el tipo de usuario 
-				int tipo =comboBox_2.getSelectedIndex();
-				
-				//limpiando combobox de los vuelos
-				comboBox_1.removeAllItems();
-				
-				//llamando a la funcion para agregar los vuelos a una combobox
-				agregarVuelos(comboBox_1,listaVuelos,listaPuertas,tipo);
-				
-				JOptionPane.showMessageDialog(null, "Puertas Actualizadas!");
-				
-			}
-		});
-		btnActualizar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnActualizar.setBounds(164, 242, 89, 23);
-		contentPane.add(btnActualizar);
 	}
 	//Metodo para agregar vuelos a los comboBox
-		public void agregarVuelos(JComboBox<Object> comboBox, String[] listaVuelos,JTextField[] listaPuertas, int tipoUsuario) {
+		public void agregarVuelos(JComboBox<Object> comboBox,String[] listaVuelos, JTextField[] listaPuertas, int tipoUsuario) {
 			int indice = 0;
 			JTextField datoTextField = listaPuertas[tipoUsuario];	//Se extrae el text field con la cantidad de puertas. 0 Oro, 1 Platino, 2 Preferencial
 			int cantidadPuertas = Integer.parseInt(datoTextField.getText());		//Se parsea el dato del text field
