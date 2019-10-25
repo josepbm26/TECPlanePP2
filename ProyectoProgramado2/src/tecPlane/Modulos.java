@@ -17,8 +17,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
+
+//librerias para mandar mensajes
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 public class Modulos extends JFrame {
 
@@ -42,6 +57,7 @@ public class Modulos extends JFrame {
 	static int contadorPlatino=2;
 	static int contadorOro=2;
 	static int contadorEconomico=1;
+	private JTextField textField_4;
 
 	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales, Puertas[] puertasPlatinos, Puertas[] puertasOro, Puertas[] puertasEconomicos) {
 		//instanciando las colas de los pasajeros
@@ -302,9 +318,59 @@ public class Modulos extends JFrame {
 				colaPlatinos.meterSubColaEnListbox(list_1);
 				colaPreferenciales.meterSubColaEnListbox(list_2);
 				
+				//MANDANDO EL MENSAJE DE CONFIRMACION DE LOS DATOS INGRESADOS
+				String message = "Bienvenido(a) "+persona.getNombre()+", su destino es: "+persona.getLugarDestino()+", asiento numero: "+ numeroAsiento +" Buen viaje!";		
+				String phone = "+506"+textField_4.getText();
+				
+				//CONCATENANDO EL NUMERO DE TELEFONO CON LA EXTENSION//"+50670650043";
+				String username = "abcd";
+				String password = "1234";
+				String address = "http://172.18.249.126";
+				String port = "8090";
+				
+				URL url = null;
+				try {
+					url = new URL(
+							address+":"+port+"/SendSMS?username="+username+"&password="+password+
+							"&phone="+phone+"&message="+URLEncoder.encode(message,"UTF-8"));
+				} catch (MalformedURLException | UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				URLConnection connection = null;
+				try {
+					connection = url.openConnection();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				BufferedReader bufferedReader = null;
+				try {
+					bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				String inputLine;
+				try {
+					while((inputLine = bufferedReader.readLine()) !=null){
+						System.out.println(inputLine);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					bufferedReader.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
-		btnAgregar.setBounds(151, 292, 89, 23);
+		btnAgregar.setBounds(158, 323, 89, 23);
 		contentPane.add(btnAgregar);
 		
 		JButton btnVerInfo = new JButton("Ver Info");
@@ -375,6 +441,15 @@ public class Modulos extends JFrame {
 		});
 		btnAdministrarTecPlane.setBounds(286, 604, 179, 23);
 		contentPane.add(btnAdministrarTecPlane);
+		
+		JLabel lblTelefono = new JLabel("Telefono:");
+		lblTelefono.setBounds(25, 293, 105, 14);
+		contentPane.add(lblTelefono);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(141, 292, 132, 20);
+		contentPane.add(textField_4);
+		textField_4.setColumns(10);
 		
 		
 	}

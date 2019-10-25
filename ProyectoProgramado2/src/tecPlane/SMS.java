@@ -14,7 +14,7 @@ public class SMS {
 		String phone = "+50670650043";
 		String username = "abcd";
 		String password = "1234";
-		String address = "http://192.168.18.3";
+		String address = "http://172.18.249.126";
 		String port = "8090";
 		
 		URL url = new URL(
