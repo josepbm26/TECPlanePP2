@@ -285,7 +285,7 @@ public class Modulos extends JFrame {
 						//generacion de asiento para platinos "P"
 						numeroAsiento="P"+asientos[numeroRan]+String.valueOf(contadorPlatino);
 						vuelo.setNumeroAsiento(numeroAsiento);
-						puertasPreferenciales[contadorPlatino]=vuelo;
+						puertasPlatinos[contadorPlatino]=vuelo;
 						contadorPlatino++;
 					}
 				}
@@ -295,7 +295,7 @@ public class Modulos extends JFrame {
 						//generacion de asiento para oro "O"
 						numeroAsiento="O"+asientos[numeroRan]+String.valueOf(contadorOro);
 						vuelo.setNumeroAsiento(numeroAsiento);
-						puertasPreferenciales[contadorOro]=vuelo;
+						puertasOro[contadorOro]=vuelo;
 						contadorOro++;
 					}
 				}
@@ -318,6 +318,7 @@ public class Modulos extends JFrame {
 				colaPlatinos.meterSubColaEnListbox(list_1);
 				colaPreferenciales.meterSubColaEnListbox(list_2);
 				
+				/*
 				//MANDANDO EL MENSAJE DE CONFIRMACION DE LOS DATOS INGRESADOS
 				String message = "Bienvenido(a) "+persona.getNombre()+", su destino es: "+persona.getLugarDestino()+", asiento numero: "+ numeroAsiento +" Buen viaje!";		
 				String phone = "+506"+textField_4.getText();
@@ -366,7 +367,8 @@ public class Modulos extends JFrame {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				} 
+			 */
 				
 			}
 		});
@@ -435,7 +437,7 @@ public class Modulos extends JFrame {
 		JButton btnAdministrarTecPlane = new JButton("Administrar TEC Plane");
 		btnAdministrarTecPlane.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Administracion ventana = new Administracion(listaVuelos,listaPuertas);
+				Administracion ventana = new Administracion(listaVuelos,listaPuertas,puertasPreferenciales,puertasPlatinos,puertasOro,puertasEconomicos,contadorPreferencial,contadorOro,contadorPlatino);
 				ventana.setVisible(true);
 			}
 		});
