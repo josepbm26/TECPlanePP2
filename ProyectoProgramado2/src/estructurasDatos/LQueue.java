@@ -21,27 +21,32 @@ public class LQueue implements TipoEstructuras {
 		this.rear = rear.getNext();
 		this.size++;
 	}
+	
+	public int getSize() {
+		return size;
+	}
+	
 	public Node eliminar(){
 		if(this.size == 0){
 			System.out.println("Queue is empty");
 			return null;
 		}
-		Node temp = (Node)this.front.getNext().getElement();
+		Node temp = (Node)this.front.getNext();
 		Node nTemp = this.front.getNext();
 		this.front.setNext(nTemp.getNext());
 		if (this.rear == nTemp){
 			this.rear = this.front;
 		}
 		this.size--;
-		return temp;
+		return temp.getNext();
 	}
 
-	public Object first(){
+	public Node first(){				//Cambio**
 		if(this.size == 0){
 			System.out.println("Queue is empty");
 			return null;
 		}
-		return this.front.getNext().getElement();
+		return this.front.getNext();
 	}
 	
 	public int size(){
@@ -81,11 +86,7 @@ public class LQueue implements TipoEstructuras {
 		
 	}
 
-	public void busqueda() {
-		// TODO Auto-generated method stub
 		
-	}
-	
 	public void actualizarPuerta(JList puerta, String u_destino) {
 		//creando la lista que se va a meter dentro de la listbox (necesario)
 		DefaultListModel listaModel = new DefaultListModel();
@@ -102,5 +103,13 @@ public class LQueue implements TipoEstructuras {
 		puerta.setModel(listaModel);
 	
 	}
+
+	@Override
+	public void busqueda() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
 }

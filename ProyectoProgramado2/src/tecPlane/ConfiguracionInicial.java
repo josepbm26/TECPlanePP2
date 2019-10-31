@@ -15,6 +15,9 @@ import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
@@ -172,15 +175,15 @@ public class ConfiguracionInicial {
 				Puertas puertasPlatinos[] = new Puertas[99];
 				Puertas puertasOro[] = new Puertas[99];
 				Puertas puertasEconomicos[] = new Puertas[99];
-				Persona persona1 = new Persona("Andres Barahona", "21/01/1995", "Noruego", "Inglaterra", "Costa Rica", "Oro", 8080475, true);
+				Persona persona1 = new Persona("Andres Barahona", "21/01/1995", "Noruego", "Inglaterra", "Costa Rica", "Oro",Modulos.obtenerHora(), 8080475, true);
 				Puertas vuelo1=new Puertas("Costa Rica","DC0");
-				Persona persona2 = new Persona("Andres Gutierrez", "27/05/1997", "Africano", "China", "Brasil", "Platino", 4045654,false);
+				Persona persona2 = new Persona("Andres Gutierrez", "27/05/1997", "Africano", "China", "Brasil", "Platino",Modulos.obtenerHora(), 4045654,false);
 				Puertas vuelo2=new Puertas("Brasil","PV0");
-				Persona persona3 = new Persona("Jose Barrantes", "26/09/2000", "Costarricense", "Estados Unidos", "Panama", "Oro", 855515,true);
+				Persona persona3 = new Persona("Jose Barrantes", "26/09/2000", "Costarricense", "Estados Unidos", "Panama","Oro", Modulos.obtenerHora(), 855515,true);
 				Puertas vuelo3=new Puertas("Panama","DV1");
-				Persona persona4 = new Persona("Pedro Salas", "27/12/1987", "Chino", "China", "Panama", "Platino", 787514,false);
+				Persona persona4 = new Persona("Pedro Salas", "27/12/1987", "Chino", "China", "Panama", "Platino",Modulos.obtenerHora(), 787514,false);
 				Puertas vuelo4=new Puertas("Panama","PC1");
-				Persona persona5 = new Persona("Ana Solis", "4/05/1992", "Mexicana", "Mexico", "Chile", "Economico", 1212154,false);
+				Persona persona5 = new Persona("Ana Solis", "4/05/1992", "Mexicana", "Mexico", "Chile", "Economico",Modulos.obtenerHora(), 1212154,false);
 				Puertas vuelo5=new Puertas("Chile","EP0");
 				colaOros.insertar(persona1);
 				puertasOro[0]=vuelo1;
@@ -204,12 +207,18 @@ public class ConfiguracionInicial {
 				Modulos ventana = new Modulos(colaPreferenciales,colaPlatinos,colaOros,colaEconomicos,cantidadPuertas,puertasPreferenciales,puertasPlatinos,puertasOro,puertasEconomicos);
 				frame.dispose();
 				ventana.setVisible(true);
+				
+				//Generacion al azar si es preferencial
+				Random numeroAleatorio = new Random(); //Libreria para genera un numero al azar
+				int numero= numeroAleatorio.nextInt(9); //Genera un valor entre el rango 0 y 8
+								
 			}
 		});
 		btnSeguir.setBounds(327, 395, 89, 23);
 		frame.getContentPane().add(btnSeguir);
 							
 	}
+	
 }
 
 

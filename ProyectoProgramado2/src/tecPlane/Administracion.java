@@ -26,7 +26,7 @@ public class Administracion extends JFrame {
 	private JTextField textField_2;
 
 
-	public Administracion(String[] listaVuelos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales,Puertas[] puertasPlatinos,Puertas[] puertasOro,Puertas[] puertasEconomicos,int contadorPreferencial,int contadorOro, int contadorPlatino) {
+	public Administracion(String[] listaVuelos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales,Puertas[] puertasPlatinos,Puertas[] puertasOro,Puertas[] puertasEconomicos,int contadorEconomico,int contadorPreferencial,int contadorOro, int contadorPlatino,int[] listaPronedios,int[] puertas_PlanLealtad) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 898, 464);
 		contentPane = new JPanel();
@@ -57,7 +57,7 @@ public class Administracion extends JFrame {
 		JButton btnNewButton = new JButton("Ver");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Tiempos de espera\n\nEconomico:  s \nOro:  s \nPlatino:  s \nPreferencial:  s");
+				JOptionPane.showMessageDialog(null, "Tiempos de espera\n\nEconomico: \nOro:" + listaPronedios[0] + "\nPlatino:" + listaPronedios[1] + "\nPreferencial:" + listaPronedios[3]);
 			}
 		});
 		btnNewButton.setBounds(658, 124, 89, 23);
@@ -100,7 +100,7 @@ public class Administracion extends JFrame {
 		JButton btnNewButton_2 = new JButton("Ver");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "asd");
+				JOptionPane.showMessageDialog(null,"sad = " + puertas_PlanLealtad[0] + "asd =" + puertas_PlanLealtad[1] + "qwe = " + puertas_PlanLealtad[2]);
 			}
 		});
 		btnNewButton_2.setBounds(658, 296, 89, 23);
@@ -126,7 +126,7 @@ public class Administracion extends JFrame {
 		JButton btnVer_2 = new JButton("Ver");
 		btnVer_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "asd");
+				JOptionPane.showMessageDialog(null,"Total de personas por tipo de asiento: \n\nEconomico:" + contadorEconomico +  " asientos \nOro:" + contadorOro + " asientos \nPlatino:" + contadorPlatino + " asientos \nPreferencial:" + contadorPreferencial +" asientos");
 			}
 		});
 		btnVer_2.setBounds(658, 399, 89, 23);

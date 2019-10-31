@@ -40,4 +40,5 @@ public class Node {
 		this.next = next;	
 	}
 	
+		
 }//Fin de la clase
