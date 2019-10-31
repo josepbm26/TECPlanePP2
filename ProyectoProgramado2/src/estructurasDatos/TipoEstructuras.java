@@ -6,7 +6,5 @@ public interface TipoEstructuras {
 	
 	public void insertar(Object element);
 	
-	public void busqueda();
-	
-	public Node eliminar();
+	public void eliminar();
 }

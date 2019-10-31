@@ -93,6 +93,7 @@ public class ConfiguracionInicial {
 		frame.getContentPane().add(label_1);
 		
 		textField_1 = new JTextField();
+		textField_1.setText("13");
 		textField_1.setColumns(10);
 		textField_1.setBounds(575, 198, 45, 20);
 		frame.getContentPane().add(textField_1);
@@ -116,6 +117,7 @@ public class ConfiguracionInicial {
 		frame.getContentPane().add(label_3);
 		
 		textField_2 = new JTextField();
+		textField_2.setText("15");
 		textField_2.setColumns(10);
 		textField_2.setBounds(163, 368, 45, 20);
 		frame.getContentPane().add(textField_2);
@@ -158,6 +160,7 @@ public class ConfiguracionInicial {
 		frame.getContentPane().add(label_8);
 		
 		textField = new JTextField();
+		textField.setText("8");
 		textField.setColumns(10);
 		textField.setBounds(350, 198, 45, 20);
 		frame.getContentPane().add(textField);

@@ -47,7 +47,9 @@ public class Modulos extends JFrame {
 	private JTextField textField_6;
 	
 	//creando las colas
-	private LQueue colaGeneralPasajeros; //cola grande que contiene la subcolas peque;as ordenadas por prioridad del pasajero
+	private LQueue colaGeneralPasajeros; //cola grande que contiene la subcolas peque;as ordenadas por prioridad del pasajer
+	private LQueue colaSalidas;//Cola para la salida de los pasajeros
+	
 	
 	//Creacion de lista de vuelos
 	String listaVuelos[] = {"Costa Rica","Brasil","Panama","Chile","Egipto","Marruecos","Turquia","China","Rusia","Paraguay","Uruguay","Belice","Ghana","Belgica","Australia",
@@ -83,6 +85,7 @@ public class Modulos extends JFrame {
 	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales, Puertas[] puertasPlatinos, Puertas[] puertasOro, Puertas[] puertasEconomicos) {
 		//instanciando las colas de los pasajeros
 		colaGeneralPasajeros = new LQueue();
+		colaSalidas = new LQueue();
 		
 		//metiendo en orden las colas en la cola grande    //Orden en ser atendido
 		colaGeneralPasajeros.insertar(colaPreferenciales);  //1ro
@@ -155,75 +158,107 @@ public class Modulos extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
+		//Oro
 		JList list = new JList();
 		list.setBounds(309, 107, 156, 224);
 		contentPane.add(list);
-		
+		//Platino
 		JList list_1 = new JList();
 		list_1.setBounds(617, 107, 156, 224);
 		contentPane.add(list_1);
+		//Preferenciales
+		JList list_2 = new JList();
+		list_2.setBounds(46, 387, 156, 224);
+		contentPane.add(list_2);
+		//Salida
+		JList list_3 = new JList();
+		list_3.setBounds(499, 387, 416, 224);
+		contentPane.add(list_3);
 		
+		//Oro
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(475, 111, 132, 17);
 		contentPane.add(comboBox);
 		agregarVuelos(comboBox,listaPuertas,0);
+		//Platino
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(783, 111, 132, 17);
+		contentPane.add(comboBox_1);
+		agregarVuelos(comboBox_1,listaPuertas,1);
+		//Preferenciales
+		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.setBounds(212, 402, 132, 17);
+		contentPane.add(comboBox_2);
+		agregarVuelos(comboBox_2,listaPuertas,2);
 		
+		
+		//Atender Oro
 		JButton btnAtender = new JButton("Atender");
 		btnAtender.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String destino = String.valueOf(comboBox.getSelectedItem());
+				colaGeneralPasajeros.atenderPasajero(list_3, 2,destino);
+				System.out.println(colaOros);
+				colaOros.busquedaEliminar(list.getSelectedValue().toString());
+				colaSalidas.insertar(list.getSelectedValue());
+				System.out.println(colaOros);
+				/*
+				//Calculo de promedios
 				int salidaOro = obtenerHora();
 				int suma = promedioTiempo_planLealtad(salidaOro,colaOros,list,sumaOro);
 				promedioOro = suma / contadorOro;
 				System.out.println("p = " + promedioOro);
-				Promedio_puertasOro = totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaOros,list);
+				//Promedio_puertasOro = totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaOros,list);*/
 			}
 		});
 		btnAtender.setBounds(499, 185, 89, 23);
 		contentPane.add(btnAtender);
 		
+		//Atender platino
 		JButton button = new JButton("Atender");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String destino = String.valueOf(comboBox_1.getSelectedItem());
+				colaGeneralPasajeros.atenderPasajero(list_3, 1,destino);
+				colaPlatinos.busquedaEliminar(list_1.getSelectedValue().toString());
+				colaSalidas.insertar(list_1.getSelectedValue());
+				//Calculo de promedios 
 				int salidaPlatino = obtenerHora();
 				int suma = promedioTiempo_planLealtad(salidaPlatino,colaPlatinos,list_1,sumaPlatino);
 				promedioPlatino = suma / contadorPlatino;
 				System.out.println("p = " + promedioPlatino);
-				totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPlatinos,list_1);
+				//totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPlatinos,list_1);
 			}
 		});
 		button.setBounds(811, 185, 89, 23);
 		contentPane.add(button);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(783, 111, 132, 17);
-		contentPane.add(comboBox_1);
-		agregarVuelos(comboBox_1,listaPuertas,1);
-		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(212, 402, 132, 17);
-		contentPane.add(comboBox_2);
-		agregarVuelos(comboBox_2,listaPuertas,2);
-				
-		JList list_2 = new JList();
-		list_2.setBounds(46, 387, 156, 224);
-		contentPane.add(list_2);
-		
+		//Atender Preferenciales
 		JButton button_1 = new JButton("Atender");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String destino = String.valueOf(comboBox_2.getSelectedItem());
+				colaGeneralPasajeros.atenderPasajero(list_3, 0,destino);
+				Persona persona = (Persona)colaPreferenciales.firstOriginal();
+				if (persona.getTipoUsuario()=="Platino") {
+					colaPlatinos.busquedaEliminar(list_2.getSelectedValue().toString());
+				}
+				else if(persona.getTipoUsuario()=="Oro") {
+					colaOros.busquedaEliminar(list_2.getSelectedValue().toString());
+				}
+				colaPreferenciales.busquedaEliminar(list_2.getSelectedValue().toString());
+				colaSalidas.insertar(list_2.getSelectedValue());
+				//Calculo de promedios
 				int salidaPrefe = obtenerHora();
 				int suma = promedioTiempo_planLealtad(salidaPrefe,colaPreferenciales,list_2,sumaPrefe);
 				promedioPrefe = suma / contadorPreferencial;
 				System.out.println("p = " + promedioPrefe);
-				totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPreferenciales,list_2);
+				//totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPreferenciales,list_2);
 			}
 		});
 		button_1.setBounds(236, 476, 89, 23);
 		contentPane.add(button_1);
 		
-		JList list_3 = new JList();
-		list_3.setBounds(499, 387, 416, 224);
-		contentPane.add(list_3);
 		
 		JButton btnSalir = new JButton("Salir");
 		btnSalir.addActionListener(new ActionListener() {
@@ -427,7 +462,7 @@ public class Modulos extends JFrame {
 		JButton btnVerInfo = new JButton("Ver Info");
 		btnVerInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, colaOros.toString()); //Ver informacion de todos los oros para pruebas
+				JOptionPane.showMessageDialog(null, colaOros.buscarPersona(list.getSelectedValue().toString())); //Ver informacion de todos los oros para pruebas
 			}
 		});
 		btnVerInfo.setBounds(499, 235, 89, 23);
@@ -555,13 +590,13 @@ public class Modulos extends JFrame {
 						//System.out.println("S0 =" + suma);
 						suma = suma + duracionPersona;
 						//System.out.println("S1 =" + suma);
-						aux.eliminar();
+						//aux.eliminar();
 						//System.out.print(aux.toString());
 						return suma;
 					}
 					else {
 						//System.out.println("--------------no entro");
-						aux.eliminar();
+						//aux.eliminar();
 						//System.out.print(aux.toString());
 					contador++;
 					}
@@ -570,12 +605,10 @@ public class Modulos extends JFrame {
 				
 			
 			}
-		
-			
-			
-			
-											//Metodos para promedio de personas atendidas por puerta
+	
+		//Metodos para promedio de personas atendidas por puerta
 		//Metodo para promedio de personas atendidas por tipo de puerta
+			/*
 			public int totalPersonasPuerta(String[] listaVuelos, int[] listaVuelos_Contadores,LQueue colaPlan,JList<Object> list) {
 				String nombrePersona = list.getSelectedValue().toString();																//Identificador de la puerta
 				System.out.println("N = " + nombrePersona);
@@ -605,32 +638,6 @@ public class Modulos extends JFrame {
 					}
 				}
 				return listaVuelos_Contadores[contador];
-			}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			} */	
 		
 }
