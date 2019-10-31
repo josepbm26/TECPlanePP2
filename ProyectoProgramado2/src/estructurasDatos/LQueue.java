@@ -10,6 +10,7 @@ public class LQueue implements TipoEstructuras {
 	private Node rear;
 	private int size;
 	
+	DefaultListModel listaModelSalida = new DefaultListModel();//Listbox que se va a cargar en el modulo de salida
 	public LQueue(){
 		this.front = new Node();
 		this.rear = this.front;
@@ -107,7 +108,6 @@ public class LQueue implements TipoEstructuras {
 	//Metodo para atender un pasajero
 	public void atenderPasajero(JList lista,int tipoUsuario,String u_destino) {
 		//Cola temporal donde se va a guardar el tipo de usuario
-		DefaultListModel listaModelSalida = new DefaultListModel();
 		LQueue colaTemp=new LQueue();
 		Node temp = this.front.getNext();
 		int contador=0;
@@ -162,13 +162,39 @@ public class LQueue implements TipoEstructuras {
 	}
 	
 	//Metodo utilizado para dar salida a los pasajeros del avion, por orden de prioridad
-	public void salidaPajeros(String tipoUsuario, boolean esPreferencial) {
-		
+	public void salidaPasajeros() {
+		Node temp=this.front.getNext();
+		while (temp!=null) {
+			Persona pasajero = (Persona)temp.getElement();
+			if(pasajero.getPreferencial()==true) {
+				busquedaEliminar(pasajero.getNombre());
+				break;
+			}
+			String tipo=pasajero.getTipoUsuario();
+			
+			if(tipo=="Platino") {
+				busquedaEliminar(pasajero.getNombre());
+				break;
+			}
+			if (tipo=="Oro") {
+				busquedaEliminar(pasajero.getNombre());
+				break;
+			}
+			temp=temp.getNext();
+		}
+		size--;
 	}
 	
+	public void actualizarPuertaSalida(JList puerta) {
+		Node temp = this.front.getNext();
+		while (temp != null) {
+			Persona pasajero = (Persona)temp.getElement();
+			listaModelSalida.addElement(pasajero.getNombre());
+			temp=temp.getNext();
+		}
+		puerta.setModel(listaModelSalida);
+	}
 	
-
-		
 	public void actualizarPuerta(JList puerta, String u_destino) {
 		//creando la lista que se va a meter dentro de la listbox (necesario)
 		DefaultListModel listaModel = new DefaultListModel();
