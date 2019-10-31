@@ -1,20 +1,24 @@
 package tecPlane;
 
+import java.time.LocalDateTime;
+import tecPlane.Modulos;
+
 public class Persona {
 	
 	//Atributos de la clase
 	
 	private String nombre, fechaNacimiento, nacionalidad, lugarOrigen, lugarDestino, tipoUsuario;
-	private int numeroPasaporte;
+	private int numeroPasaporte,horaIngreso;
 	private boolean preferencial=false;
 	
-	public Persona (String nombre, String fechaNacimiento, String nacionalidad, String lugarOrigen, String lugarDestino, String tipoUsuario, int numeroPasaporte, boolean preferencial) {
+	public Persona (String nombre, String fechaNacimiento, String nacionalidad, String lugarOrigen, String lugarDestino, String tipoUsuario,int horaIngreso, int numeroPasaporte, boolean preferencial) {
 		setNombre(nombre);
 		setFechaNacimiento(fechaNacimiento);
 		setNacionalidad(nacionalidad);
 		setLugarOrigen(lugarOrigen);
 		setLugarDestino(lugarDestino);
 		setTipoUsuario(tipoUsuario);
+		setHoraIngreso(horaIngreso);
 		setNumeroPasaporte(numeroPasaporte);
 		setPreferencial(preferencial);
 	}//Constructor
@@ -70,6 +74,14 @@ public class Persona {
 		this.tipoUsuario = tipoUsuario;
 	}
 	
+	public int getHoraIngreso() {
+		return horaIngreso;
+	}
+	
+	public void setHoraIngreso(int horaIngreso) {
+		this.horaIngreso = Modulos.obtenerHora();
+	}
+	
 	public boolean getPreferencial() {
 		return preferencial;
 	}
@@ -87,7 +99,7 @@ public class Persona {
 
 	public String toString() {
 		return "nombre= " + nombre + "\n fechaNacimiento= " + fechaNacimiento + "\n nacionalidad= " + nacionalidad
-				+ "\n lugarOrigen= " + lugarOrigen + "\n lugarDestino= " + lugarDestino + "\n tipoUsuario= "+ tipoUsuario +"\n numeroPasaporte= "
+				+ "\n lugarOrigen= " + lugarOrigen + "\n lugarDestino= " + lugarDestino + "\n Hora de Ingreso= "+ horaIngreso + "\n tipoUsuario= "+ tipoUsuario +"\n numeroPasaporte= "
 				+ numeroPasaporte + "\n Preferencial= " + preferencial+ "\n";
 	}
 	
