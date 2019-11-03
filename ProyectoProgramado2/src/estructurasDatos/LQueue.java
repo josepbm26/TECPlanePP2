@@ -164,28 +164,43 @@ public class LQueue implements TipoEstructuras {
 	//Metodo utilizado para dar salida a los pasajeros del avion, por orden de prioridad
 	public void salidaPasajeros() {
 		Node temp=this.front.getNext();
+		boolean esPreferencial=false;
+		//Recorrido que indentificara si existe algun preferecial en la cola
 		while (temp!=null) {
-			Persona pasajero = (Persona)temp.getElement();
-			if(pasajero.getPreferencial()==true) {
-				busquedaEliminar(pasajero.getNombre());
-				break;
-			}
-			String tipo=pasajero.getTipoUsuario();
-			
-			if(tipo=="Platino") {
-				busquedaEliminar(pasajero.getNombre());
-				break;
-			}
-			if (tipo=="Oro") {
-				busquedaEliminar(pasajero.getNombre());
+			Persona pasajeroPref = (Persona)temp.getElement();
+			if(pasajeroPref.getPreferencial()==true) {
+				busquedaEliminar(pasajeroPref.getNombre());
+				esPreferencial=true;
 				break;
 			}
 			temp=temp.getNext();
 		}
-		size--;
+		if(esPreferencial==false) {
+			Node nTemp=this.front.getNext();
+			//Recorrido que se usara para darle salida a tipo de usuario que no sea preferencial
+			while(nTemp!=null) {
+				Persona pasajero = (Persona)nTemp.getElement();
+				String tipoUsuario=pasajero.getTipoUsuario();
+				if(tipoUsuario=="Platino") {
+					busquedaEliminar(pasajero.getNombre());
+					break;
+				}
+				else if(tipoUsuario=="Oro") {
+					busquedaEliminar(pasajero.getNombre());
+					break;
+				}
+				else if(tipoUsuario=="Economico") {
+					busquedaEliminar(pasajero.getNombre());
+					break;
+				}
+				nTemp=nTemp.getNext();
+			}
+		}
 	}
 	
+	//Metodo para actualizar listbox de cola de salida
 	public void actualizarPuertaSalida(JList puerta) {
+		DefaultListModel listaModelSalida = new DefaultListModel();//Listbox que se va a cargar en el modulo de salida
 		Node temp = this.front.getNext();
 		while (temp != null) {
 			Persona pasajero = (Persona)temp.getElement();

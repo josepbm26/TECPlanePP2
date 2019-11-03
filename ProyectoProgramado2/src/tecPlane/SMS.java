@@ -9,8 +9,8 @@ import java.net.URLEncoder;
 public class SMS {
 
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
-		String message = "Su vuelo se fue a la verga, ya funcionan los mensajes HEE HEE";		
+		
+		String message = "";		
 		String phone = "+50670650043";
 		String username = "abcd";
 		String password = "1234";
