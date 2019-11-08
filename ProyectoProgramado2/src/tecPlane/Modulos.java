@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+
 //librerias de GOOGLE API NATURRAL SENTIMENT ANALYSIS
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -75,6 +76,12 @@ public class Modulos extends JFrame {
 	public static int contadorOro=2;
 	public static int contadorEconomico=1;
 	private JTextField textField_4;
+	
+	//Contador de atendidos por tipo
+	public static int contOro=0;
+	public static int contPlatino=0;
+	public static int contPreferenciales=0;
+	
 
 	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales, Puertas[] puertasPlatinos, Puertas[] puertasOro, Puertas[] puertasEconomicos) {
 		//instanciando las colas de los pasajeros
@@ -190,10 +197,12 @@ public class Modulos extends JFrame {
 		btnAtender.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String destino = String.valueOf(comboBox.getSelectedItem());
+				String nombrePasajero = list.getSelectedValue().toString();
 				colaGeneralPasajeros.atenderPasajero(list_3, 2,destino);
-				colaSalidas.insertar(colaOros.buscarPersona(list.getSelectedValue().toString()));
-				colaOros.busquedaEliminar(list.getSelectedValue().toString());
-				
+				colaSalidas.insertar(colaOros.buscarPersona(nombrePasajero));
+				JOptionPane.showMessageDialog(null, "Ingresa " + nombrePasajero + " al asiento " + puertasOro[(colaOros.buscarPosicion(nombrePasajero)+2)+contOro].getNumeroAsiento() + " con destino a " + destino);
+				colaOros.busquedaEliminar(nombrePasajero);
+				contOro++;
 			}
 		});
 		btnAtender.setBounds(499, 185, 89, 23);
@@ -204,10 +213,12 @@ public class Modulos extends JFrame {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String destino = String.valueOf(comboBox_1.getSelectedItem());
+				String nombrePasajero = list_1.getSelectedValue().toString();
 				colaGeneralPasajeros.atenderPasajero(list_3, 1,destino);
-				colaSalidas.insertar(colaPlatinos.buscarPersona(list_1.getSelectedValue().toString()));
-				colaPlatinos.busquedaEliminar(list_1.getSelectedValue().toString());
-			
+				colaSalidas.insertar(colaPlatinos.buscarPersona(nombrePasajero));
+				JOptionPane.showMessageDialog(null, "Ingresa " + nombrePasajero + " al asiento " + puertasPlatinos[colaPlatinos.buscarPosicion(nombrePasajero)+contPlatino].getNumeroAsiento() + " con destino a " + destino);
+				colaPlatinos.busquedaEliminar(nombrePasajero);
+				contPlatino++;
 			}
 		});
 		button.setBounds(811, 185, 89, 23);
@@ -218,16 +229,19 @@ public class Modulos extends JFrame {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String destino = String.valueOf(comboBox_2.getSelectedItem());
+				String nombrePasajero = list_2.getSelectedValue().toString();
 				colaGeneralPasajeros.atenderPasajero(list_3, 0,destino);
 				Persona persona = (Persona)colaPreferenciales.firstOriginal();
 				if (persona.getTipoUsuario()=="Platino") {
-					colaPlatinos.busquedaEliminar(list_2.getSelectedValue().toString());
+					colaPlatinos.busquedaEliminar(nombrePasajero);
 				}
 				else if(persona.getTipoUsuario()=="Oro") {
-					colaOros.busquedaEliminar(list_2.getSelectedValue().toString());
+					colaOros.busquedaEliminar(nombrePasajero);
 				}
-				colaSalidas.insertar(colaPreferenciales.buscarPersona(list_2.getSelectedValue().toString())); 
-				colaPreferenciales.busquedaEliminar(list_2.getSelectedValue().toString());
+				colaSalidas.insertar(colaPreferenciales.buscarPersona(nombrePasajero)); 
+				JOptionPane.showMessageDialog(null, "Ingresa " + nombrePasajero + " al asiento " + puertasPreferenciales[colaPreferenciales.buscarPosicion(nombrePasajero)+contPreferenciales].getNumeroAsiento() + " con destino a " + destino);
+				colaPreferenciales.busquedaEliminar(nombrePasajero);
+				contPreferenciales++;
 			}
 		});
 		button_1.setBounds(236, 476, 89, 23);
@@ -377,7 +391,7 @@ public class Modulos extends JFrame {
 				colaPlatinos.meterSubColaEnListbox(list_1);
 				colaPreferenciales.meterSubColaEnListbox(list_2);
 				
-				/*
+				
 				//MANDANDO EL MENSAJE DE CONFIRMACION DE LOS DATOS INGRESADOS
 				String message = "Bienvenido(a) "+persona.getNombre()+", su destino es: "+persona.getLugarDestino()+", asiento numero: "+ numeroAsiento +" Buen viaje!";		
 				String phone = "+506"+textField_4.getText();
@@ -427,7 +441,6 @@ public class Modulos extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
-			 */
 				
 			}
 		});
@@ -503,11 +516,15 @@ public class Modulos extends JFrame {
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
+		//Generacion de hilo que se utilizara para la gestion automatizada
+		Thread hilo = new Procesos("Cola salidas", colaSalidas, list_3);
+		
 		JButton btnCheckOut = new JButton("Check out");
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				//mandando el mensaje de la encuesta
-				String mensajeEncuesta = "¡Gracias por tomar el vuelo!\n¿Qué le pareció el viaje?";
+				String mensajeEncuesta = "ï¿½Gracias por tomar el vuelo!\nï¿½Quï¿½ le pareciï¿½ el viaje?";
 				//extrayendo la respuesta para analizala con el API de Google Cloud
 				String respuesta = JOptionPane.showInputDialog(mensajeEncuesta);
 				
@@ -558,19 +575,23 @@ public class Modulos extends JFrame {
 		    	else if (Float.parseFloat(puntuacion) > 0) {
 		    		valor = "Positivo";
 		    	}
-		    	String resultados = "¡Gracias por su colaboración!\n~Analisis de la respuesta~\nPuntuacion: "+puntuacion+"\nMagnitud: "+magnitud+"\nSentimiento: "+valor;
+		    	String resultados = "ï¿½Gracias por su colaboraciï¿½n!\n~Analisis de la respuesta~\nPuntuacion: "+puntuacion+"\nMagnitud: "+magnitud+"\nSentimiento: "+valor;
 		    	JOptionPane.showMessageDialog(null, resultados);
 		    	
-				//prueba
-				System.out.println("Lista original: \n"+colaSalidas);
-				//Actualizando la listbox y la cola de salidas
-				colaSalidas.salidaPasajeros(colaSalidas);
-				System.out.println("Despues de salida: \n"+colaSalidas);
-				colaSalidas.actualizarPuertaSalida(list_3);
+				hilo.start();
 			}
 		});
-		btnCheckOut.setBounds(776, 353, 102, 23);
+		btnCheckOut.setBounds(798, 363, 102, 23);
 		contentPane.add(btnCheckOut);
+		
+		JButton btnDetener = new JButton("Detener");
+		btnDetener.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hilo.interrupt();
+			}
+		});
+		btnDetener.setBounds(499, 363, 89, 23);
+		contentPane.add(btnDetener);
 		
 		
 	}

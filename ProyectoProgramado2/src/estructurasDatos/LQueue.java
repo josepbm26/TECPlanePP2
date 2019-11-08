@@ -107,6 +107,21 @@ public class LQueue implements TipoEstructuras {
 		
 	}
 	
+	//Metodo para buscar posicion de persona en la cola
+		public int buscarPosicion(String nombre) {
+			Node temp= this.front.getNext();
+			int indice=0;
+			while(temp!=null) {
+				Persona persona = (Persona)temp.getElement();
+				if(persona.getNombre()==nombre) {
+					return indice;
+				}
+				temp=temp.getNext();
+				indice++;
+			}
+			return -1;
+		}
+	
 	//Metodo para obtener la clase objeto en especifico
 	public Persona buscarPersona(String nombre) {
 		Node temp= this.front.getNext();
