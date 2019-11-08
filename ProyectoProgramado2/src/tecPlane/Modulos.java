@@ -10,6 +10,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+//librerias de GOOGLE API NATURRAL SENTIMENT ANALYSIS
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.LanguageServiceSettings;
+import com.google.cloud.language.v1.Sentiment;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JList;
@@ -18,6 +28,8 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -494,7 +506,64 @@ public class Modulos extends JFrame {
 		JButton btnCheckOut = new JButton("Check out");
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//mandando el mensaje de la encuesta
+				String mensajeEncuesta = "¡Gracias por tomar el vuelo!\n¿Qué le pareció el viaje?";
+				//extrayendo la respuesta para analizala con el API de Google Cloud
+				String respuesta = JOptionPane.showInputDialog(mensajeEncuesta);
+				
+				//PARTE DEL API DE GOOGLE CLOUD SENTIMENT ANALYSIS
+				String puntuacion = "";
+				String magnitud = "";
+				CredentialsProvider credentialsProvider = null;
+				try {
+					credentialsProvider = FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(new FileInputStream("C:/Users/Andres/Documents/TEC/II Semestre 2019/Algoritmos y Estructuras de Datos/Progra 2/apiCredenciales.json")));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    	LanguageServiceSettings languageServiceSettings = null;
+				try {
+					languageServiceSettings = LanguageServiceSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    	try (LanguageServiceClient language  = LanguageServiceClient.create(languageServiceSettings)) {
+
+		    	      // The text to analyze
+		    		  String text = respuesta;
+		    	      Document doc = Document.newBuilder().setContent(text).setType(com.google.cloud.language.v1.Document.Type.PLAIN_TEXT).build();
+
+		    	      // Detects the sentiment of the text
+		    	      Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
+		    	      
+		    	      //extrayendo resultados del analisis
+		    	      puntuacion = String.valueOf(sentiment.getScore());
+		    	      magnitud = String.valueOf(sentiment.getMagnitude());
+		    	      
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		    	//mandando resultados
+		    	String valor = "";
+		    	
+		    	if (Float.parseFloat(puntuacion) < 0) {
+		    		valor = "Negativo";
+		    	}
+		    	else if (Float.parseFloat(puntuacion) > 0) {
+		    		valor = "Positivo";
+		    	}
+		    	String resultados = "¡Gracias por su colaboración!\n~Analisis de la respuesta~\nPuntuacion: "+puntuacion+"\nMagnitud: "+magnitud+"\nSentimiento: "+valor;
+		    	JOptionPane.showMessageDialog(null, resultados);
+		    	
+				//prueba
 				System.out.println("Lista original: \n"+colaSalidas);
+				//Actualizando la listbox y la cola de salidas
 				colaSalidas.salidaPasajeros(colaSalidas);
 				System.out.println("Despues de salida: \n"+colaSalidas);
 				colaSalidas.actualizarPuertaSalida(list_3);
