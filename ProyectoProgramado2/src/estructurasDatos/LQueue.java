@@ -1,5 +1,9 @@
 package estructurasDatos;
+import tecPlane.Modulos;
 import tecPlane.Persona;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -10,7 +14,19 @@ public class LQueue implements TipoEstructuras {
 	private Node rear;
 	private int size;
 	
-	DefaultListModel listaModelSalida = new DefaultListModel();//Listbox que se va a cargar en el modulo de salida
+	//Creacion de la suma de duraciones para el promedio de espera
+	int sumaOro = 0;
+	int sumaPlatino = 0;
+	int sumaEconomico = 0;
+	int sumaColaSalida = 0;
+	
+	//Creacion de variables que almacenan el promedio segun planesde lealtad.
+	public static int promedioOro;
+	public static int promedioPlatino;
+	public static int promedioEconomico;
+	public static int promedioSalida;
+	
+	DefaultListModel listaModelSalida = new DefaultListModel();												//Listbox que se va a cargar en el modulo de salida
 	public LQueue(){
 		this.front = new Node();
 		this.rear = this.front;
@@ -22,9 +38,9 @@ public class LQueue implements TipoEstructuras {
 		this.rear = rear.getNext();
 		this.size++;
 	}
-	
+		
 	public int getSize() {
-		return size;
+		return this.size;
 	}
 	
 	public void eliminar(){
@@ -55,15 +71,14 @@ public class LQueue implements TipoEstructuras {
 		return this.front.getNext();
 	}
 	
-	public int size(){
-		return this.size;
-	}
 	
 	public void clear(){
 		this.front = new Node();
 		this.rear = this.front;
 		this.size = 0;
 	}
+	
+	
 	
 	public String toString(){
 		String result = "";
@@ -135,41 +150,16 @@ public class LQueue implements TipoEstructuras {
 		listaModelSalida.addElement(persona.getNombre());
 		lista.setModel(listaModelSalida);
 	}
-	
-	//Metodo de busqueda de pasajero especifico con el fin de ponerlo de primero de la cola para eliminarlo
-	public void busquedaEliminar(String nombre) {
-		Node auxiliar=new Node();
-		Node nTemp = this.front.getNext();
-		int contador=0;//Esta variable ayuda a saber si es el primer elemento la cola.
-		//Conocer en que posicion se encuentra de la cola
-		while(nTemp!=null) {
-			Persona persona = (Persona)nTemp.getElement();
-			if(persona.getNombre()==nombre) {
-				if(contador==0) {
-					break;
-				}
-				auxiliar.setNext(nTemp.getNext());
-				break;
-			}
-			contador++;
-			auxiliar=nTemp;
-			nTemp=nTemp.getNext();
-		}
-		if(contador==0) {
-			this.front.setNext(nTemp.getNext()); //Elimina al primer elemento de la cola
-		}
-		size--;
-	}
-	
+		
 	//Metodo utilizado para dar salida a los pasajeros del avion, por orden de prioridad
-	public void salidaPasajeros() {
+	public void salidaPasajeros(LQueue colaSalida) {
 		Node temp=this.front.getNext();
 		boolean esPreferencial=false;
 		//Recorrido que indentificara si existe algun preferecial en la cola
 		while (temp!=null) {
 			Persona pasajeroPref = (Persona)temp.getElement();
-			if(pasajeroPref.getPreferencial()==true) {
-				busquedaEliminar(pasajeroPref.getNombre());
+			if(pasajeroPref.getPreferencial()==true) {								//Metodo para obtener el tiempo de duracion en la cola de salida
+				busquedaEliminarSalida(pasajeroPref.getNombre(),colaSalida);
 				esPreferencial=true;
 				break;
 			}
@@ -181,16 +171,16 @@ public class LQueue implements TipoEstructuras {
 			while(nTemp!=null) {
 				Persona pasajero = (Persona)nTemp.getElement();
 				String tipoUsuario=pasajero.getTipoUsuario();
-				if(tipoUsuario=="Platino") {
-					busquedaEliminar(pasajero.getNombre());
+				if(tipoUsuario=="Platino") {		
+					busquedaEliminarSalida(pasajero.getNombre(),colaSalida);
 					break;
 				}
-				else if(tipoUsuario=="Oro") {
-					busquedaEliminar(pasajero.getNombre());
+				else if(tipoUsuario=="Oro") {							//Se tiene que repetir por cada usuario
+					busquedaEliminarSalida(pasajero.getNombre(),colaSalida);
 					break;
 				}
 				else if(tipoUsuario=="Economico") {
-					busquedaEliminar(pasajero.getNombre());
+					busquedaEliminarSalida(pasajero.getNombre(),colaSalida);
 					break;
 				}
 				nTemp=nTemp.getNext();
@@ -203,7 +193,7 @@ public class LQueue implements TipoEstructuras {
 		DefaultListModel listaModelSalida = new DefaultListModel();//Listbox que se va a cargar en el modulo de salida
 		Node temp = this.front.getNext();
 		while (temp != null) {
-			Persona pasajero = (Persona)temp.getElement();
+			Persona pasajero = (Persona) temp.getElement();
 			listaModelSalida.addElement(pasajero.getNombre());
 			temp=temp.getNext();
 		}
@@ -227,6 +217,102 @@ public class LQueue implements TipoEstructuras {
 	
 	}
 
+	
+	//Metodo de busqueda de pasajero especifico con el fin de ponerlo de primero de la cola para eliminarlo, pero de la SALIDA
+	public void busquedaEliminarSalida(String nombre,LQueue colaSalida) {
+		Node auxiliar=new Node();
+		Node nTemp = this.front.getNext();
+		int contador=0;																		//Esta variable ayuda a saber si es el primer elemento la cola.1
+		Persona persona = (Persona)nTemp.getElement();
+		//Conocer en que posicion se encuentra de la cola
+		while(nTemp!=null) {
+			if(persona.getNombre()==nombre) {
+				if(contador==0) {
+					break;
+				}
+				promedioTiempoSalida(persona,colaSalida);
+				auxiliar.setNext(nTemp.getNext());
+				break;
+			}
+			contador++;
+			auxiliar=nTemp;
+			nTemp=nTemp.getNext();
+			persona = (Persona)nTemp.getElement();
+		}
+		if(contador==0) {
+			promedioTiempoSalida(persona,colaSalida);
+			this.front.setNext(nTemp.getNext()); 						//Elimina al primer elemento de la cola
+		}
+		size--;
+	}
+	
+	//Metodo de busqueda de pasajero especifico con el fin de ponerlo de primero de la cola para eliminarlo
+	public void busquedaEliminar(String nombre) {
+		Node auxiliar=new Node();
+		Node nTemp = this.front.getNext();
+		int contador=0;																		//Esta variable ayuda a saber si es el primer elemento la cola.1
+		Persona persona = (Persona)nTemp.getElement();
+		//Conocer en que posicion se encuentra de la cola
+		while(nTemp!=null) {
+			if(persona.getNombre()==nombre) {
+				if(contador==0) {
+					break;
+				}
+				promedioTiempo_PlanLealtad(persona);
+				auxiliar.setNext(nTemp.getNext());
+				break;
+			}
+			contador++;
+			auxiliar=nTemp;
+			nTemp=nTemp.getNext();
+			persona = (Persona)nTemp.getElement();
+		}
+		if(contador==0) {
+			promedioTiempo_PlanLealtad(persona);
+			this.front.setNext(nTemp.getNext()); 						//Elimina al primer elemento de la cola
+		}
+		size--;
+	}
+	
+	
+	//Metodo de obtener el promedio de duracion segun plan
+	public void promedioTiempo_PlanLealtad(Persona persona) {
+		int salida = obtenerHora();
+		int ingreso = persona.getHoraIngreso();
+		if (persona.getTipoUsuario() == "Oro") {								//Se clasifica la sumatoria por el tipo de plan de lealtad
+			int duracionPersona = salida - ingreso;
+			sumaOro = sumaOro + duracionPersona;
+			promedioOro = sumaOro / Modulos.contadorOro;
+		}
+		if (persona.getTipoUsuario() == "Platino") {
+			int duracionPersona = salida - ingreso;
+			sumaPlatino = sumaPlatino + duracionPersona;						//Se suma la duracion en minutos de todos los usuarios
+			promedioPlatino = sumaPlatino / Modulos.contadorPlatino;
+		}
+		if (persona.getTipoUsuario() == "Economico") {
+			int duracionPersona = salida - ingreso;
+			sumaEconomico = sumaEconomico + duracionPersona;
+			promedioEconomico = sumaEconomico / Modulos.contadorEconomico;
+		}																				
+	}
+	
+	//Metodo de obtener el promedio de duracion en la cola de salida
+		public void promedioTiempoSalida(Persona persona,LQueue colaSalida) {
+			int salida = obtenerHora();
+			int ingreso = persona.getHoraIngreso();							//Se reciben los paramentros del metodo salidaPasajeros
+			int duracionPersona = salida - ingreso;
+			sumaColaSalida = sumaColaSalida + duracionPersona;
+			promedioSalida = sumaColaSalida / colaSalida.getSize();		
+		}
+
+	//Metodo para obtener la hora del sistema
+	public static int obtenerHora() {
+		LocalTime time = LocalTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm");
+		String parseo = (String) time.format(formatter);
+		int horaMinutos = Integer.parseInt(parseo);
+		return horaMinutos;
+	}
 	
 	
 

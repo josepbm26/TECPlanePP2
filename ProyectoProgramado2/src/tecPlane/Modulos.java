@@ -56,30 +56,12 @@ public class Modulos extends JFrame {
 			"Vietnam","Laos","Austria","Tailandia","Taiwan","Holanda","Monaco","Colombia","Argentina","Croacia","Suiza","Serbia","Israel","Nigeria","Libia","Francia","Polonia",
 			"Ecuador","Venezuela","Nicaragua","Mexico","Guatemala","Honduras","Jamaica","Bolivia","Italia","Noruega","Irlanda","Inglaterra","Gales","Suecia","Japon","Corea del Sur"};
 	
-	int listaVuelos_Contadores[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	
-	//Cantidad de personas por tipo de puerta
-	static int Promedio_puertasOro;
-	static int Promedio_puertasPlatino;
-	static int Promedio_puertasPrefe;
-	int[] puertas_PlanLealtad = {Promedio_puertasOro,Promedio_puertasPlatino,Promedio_puertasPrefe};
-	
-	//Suma de los tiempos de cada cliente segun plan de lealtad
-	static int sumaOro = 0;
-	static int sumaPlatino = 0;
-	static int sumaPrefe = 0;
-	
-	//Creacion de variables que almacenan el promedio segun planesde lealtad.
-	static int promedioOro;
-	static int promedioPlatino;
-	static int promedioPrefe;
-	int[] listaPromedios = {promedioOro,promedioPlatino,promedioPrefe};		
 		
 	//Cantidad de asientos en los vuelos separados por tipo de usuario
-	static int contadorPreferencial=2;
-	static int contadorPlatino=2;
-	static int contadorOro=2;
-	static int contadorEconomico=1;
+	public static int contadorPreferencial=2;
+	public static int contadorPlatino=2;
+	public static int contadorOro=2;
+	public static int contadorEconomico=1;
 	private JTextField textField_4;
 
 	public Modulos(LQueue colaPreferenciales, LQueue colaPlatinos, LQueue colaOros, LQueue colaEconomicos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales, Puertas[] puertasPlatinos, Puertas[] puertasOro, Puertas[] puertasEconomicos) {
@@ -92,7 +74,7 @@ public class Modulos extends JFrame {
 		colaGeneralPasajeros.insertar(colaPlatinos);        //2ndo
 		colaGeneralPasajeros.insertar(colaOros);            //3ro
 		colaGeneralPasajeros.insertar(colaEconomicos);      //4to
-		
+						
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 955, 693);
 		contentPane = new JPanel();
@@ -191,25 +173,15 @@ public class Modulos extends JFrame {
 		contentPane.add(comboBox_2);
 		agregarVuelos(comboBox_2,listaPuertas,2);
 		
-		
 		//Atender Oro
 		JButton btnAtender = new JButton("Atender");
 		btnAtender.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String destino = String.valueOf(comboBox.getSelectedItem());
 				colaGeneralPasajeros.atenderPasajero(list_3, 2,destino);
-				String nombrePasajero=list.getSelectedValue().toString();
-				colaSalidas.insertar(colaOros.buscarPersona(nombrePasajero));
-				colaOros.busquedaEliminar(nombrePasajero);
+				colaSalidas.insertar(colaOros.buscarPersona(list.getSelectedValue().toString()));
+				colaOros.busquedaEliminar(list.getSelectedValue().toString());
 				
-				
-				/*
-				//Calculo de promedios
-				int salidaOro = obtenerHora();
-				int suma = promedioTiempo_planLealtad(salidaOro,colaOros,list,sumaOro);
-				promedioOro = suma / contadorOro;
-				System.out.println("p = " + promedioOro);
-				//Promedio_puertasOro = totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaOros,list);*/
 			}
 		});
 		btnAtender.setBounds(499, 185, 89, 23);
@@ -221,15 +193,9 @@ public class Modulos extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String destino = String.valueOf(comboBox_1.getSelectedItem());
 				colaGeneralPasajeros.atenderPasajero(list_3, 1,destino);
-				String nombrePasajero=list_1.getSelectedValue().toString();
-				colaSalidas.insertar(colaPlatinos.buscarPersona(nombrePasajero));
-				colaPlatinos.busquedaEliminar(nombrePasajero);
-				/*//Calculo de promedios 
-				int salidaPlatino = obtenerHora();
-				int suma = promedioTiempo_planLealtad(salidaPlatino,colaPlatinos,list_1,sumaPlatino);
-				promedioPlatino = suma / contadorPlatino;
-				System.out.println("p = " + promedioPlatino);
-				//totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPlatinos,list_1);*/
+				colaSalidas.insertar(colaPlatinos.buscarPersona(list_1.getSelectedValue().toString()));
+				colaPlatinos.busquedaEliminar(list_1.getSelectedValue().toString());
+			
 			}
 		});
 		button.setBounds(811, 185, 89, 23);
@@ -242,26 +208,19 @@ public class Modulos extends JFrame {
 				String destino = String.valueOf(comboBox_2.getSelectedItem());
 				colaGeneralPasajeros.atenderPasajero(list_3, 0,destino);
 				Persona persona = (Persona)colaPreferenciales.firstOriginal();
-				String nombrePasajero=list_2.getSelectedValue().toString();
 				if (persona.getTipoUsuario()=="Platino") {
-					colaPlatinos.busquedaEliminar(nombrePasajero);
+					colaPlatinos.busquedaEliminar(list_2.getSelectedValue().toString());
 				}
 				else if(persona.getTipoUsuario()=="Oro") {
-					colaOros.busquedaEliminar(nombrePasajero);
+					colaOros.busquedaEliminar(list_2.getSelectedValue().toString());
 				}
-				colaSalidas.insertar(colaPreferenciales.buscarPersona(nombrePasajero));
-				colaPreferenciales.busquedaEliminar(nombrePasajero);
-				
-				/*//Calculo de promedios
-				int salidaPrefe = obtenerHora();
-				int suma = promedioTiempo_planLealtad(salidaPrefe,colaPreferenciales,list_2,sumaPrefe);
-				promedioPrefe = suma / contadorPreferencial;
-				System.out.println("p = " + promedioPrefe);
-				//totalPersonasPuerta(listaVuelos,listaVuelos_Contadores,colaPreferenciales,list_2); */
+				colaSalidas.insertar(colaPreferenciales.buscarPersona(list_2.getSelectedValue().toString())); 
+				colaPreferenciales.busquedaEliminar(list_2.getSelectedValue().toString());
 			}
 		});
 		button_1.setBounds(236, 476, 89, 23);
 		contentPane.add(button_1);
+
 		
 		
 		JButton btnSalir = new JButton("Salir");
@@ -399,7 +358,7 @@ public class Modulos extends JFrame {
 				}
 
 				//mensaje de que se anadio el pasajero a la cola
-				JOptionPane.showMessageDialog(null, "Datos Ingresados satisfactoriamente!" + "\n Su numero de asientos es: " +numeroAsiento);
+				JOptionPane.showMessageDialog(null, "Datos Ingresados satisfactoriamente!" + "\n Su numero de asientos es: " + numeroAsiento);
 				
 				//PARTE ACTUALIZANDO LAS PUERTAS
 				colaOros.meterSubColaEnListbox(list);
@@ -516,7 +475,7 @@ public class Modulos extends JFrame {
 		JButton btnAdministrarTecPlane = new JButton("Administrar TEC Plane");
 		btnAdministrarTecPlane.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Administracion ventana = new Administracion(listaVuelos,listaPuertas,puertasPreferenciales,puertasPlatinos,puertasOro,puertasEconomicos,contadorEconomico,contadorPreferencial,contadorOro,contadorPlatino,listaPromedios,puertas_PlanLealtad);
+				Administracion ventana = new Administracion(listaVuelos,listaPuertas,puertasPreferenciales,puertasPlatinos,puertasOro,puertasEconomicos,contadorEconomico,contadorPreferencial,contadorOro,contadorPlatino,colaSalidas);
 				ventana.setVisible(true);
 			}
 		});
@@ -536,12 +495,12 @@ public class Modulos extends JFrame {
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Lista original: \n"+colaSalidas);
-				colaSalidas.salidaPasajeros();
+				colaSalidas.salidaPasajeros(colaSalidas);
 				System.out.println("Despues de salida: \n"+colaSalidas);
 				colaSalidas.actualizarPuertaSalida(list_3);
 			}
 		});
-		btnCheckOut.setBounds(796, 365, 89, 23);
+		btnCheckOut.setBounds(776, 353, 102, 23);
 		contentPane.add(btnCheckOut);
 		
 		
@@ -576,38 +535,4 @@ public class Modulos extends JFrame {
 			}
 			
 			
-		//Metodo para promedio de tiempo segun plan de lealtad
-			public int promedioTiempo_planLealtad(int salida,LQueue colaPlan, JList<Object> list, int suma) {
-				int duracionPersona = 0;
-				LQueue aux = colaPlan;
-				int contador = 1;
-				String nombrePersona = list.getSelectedValue().toString();	
-				//System.out.println("a = "+nombrePersona);												//Nombre del pasajero extraido del list box.
-				while(aux.size() >= contador) {
-					//System.out.print(aux.toString());
-					Persona persona = (Persona) aux.first().getElement();	
-					//System.out.println("b = " + persona.getNombre());										//Nombre del pasajero extraido de la cola.
-					if (persona.getNombre() == nombrePersona) {											//Extrae todo, como saco solo el nombre?
-						//System.out.println("--------------entro");
-						int ingreso = persona.getHoraIngreso();
-						duracionPersona = salida - ingreso;
-						//System.out.println("dP =" + duracionPersona);
-						//System.out.println("S0 =" + suma);
-						suma = suma + duracionPersona;
-						//System.out.println("S1 =" + suma);
-						//aux.eliminar();
-						//System.out.print(aux.toString());
-						return suma;
-					}
-					else {
-						//System.out.println("--------------no entro");
-						//aux.eliminar();
-						//System.out.print(aux.toString());
-					contador++;
-					}
-				}
-				return suma;
-				
-			
-			}
 }

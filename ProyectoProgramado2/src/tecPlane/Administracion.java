@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import estructurasDatos.LQueue;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -26,7 +29,7 @@ public class Administracion extends JFrame {
 	private JTextField textField_2;
 
 
-	public Administracion(String[] listaVuelos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales,Puertas[] puertasPlatinos,Puertas[] puertasOro,Puertas[] puertasEconomicos,int contadorEconomico,int contadorPreferencial,int contadorOro, int contadorPlatino,int[] listaPronedios,int[] puertas_PlanLealtad) {
+	public Administracion(String[] listaVuelos, JTextField[] listaPuertas,Puertas[] puertasPreferenciales,Puertas[] puertasPlatinos,Puertas[] puertasOro,Puertas[] puertasEconomicos,int contadorEconomico,int contadorPreferencial,int contadorOro, int contadorPlatino,LQueue colaSalidas) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 898, 464);
 		contentPane = new JPanel();
@@ -51,13 +54,13 @@ public class Administracion extends JFrame {
 		
 		JLabel lblEstadisticcas = new JLabel("Estadisticas");
 		lblEstadisticcas.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblEstadisticcas.setBounds(658, 71, 109, 14);
+		lblEstadisticcas.setBounds(659, 27, 109, 14);
 		contentPane.add(lblEstadisticcas);
 		
 		JButton btnNewButton = new JButton("Ver");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Tiempos de espera\n\nEconomico: \nOro:" + listaPronedios[0] + "\nPlatino:" + listaPronedios[1] + "\nPreferencial:" + listaPronedios[3]);
+				JOptionPane.showMessageDialog(null, "Tiempos de espera\nOro:" + LQueue.promedioOro +" minutos." + "\nPlatino:" + LQueue.promedioPlatino +" minutos." + "\nEconomico:" + (LQueue.promedioEconomico+2) +" minutos.");
 			}
 		});
 		btnNewButton.setBounds(658, 124, 89, 23);
@@ -74,7 +77,7 @@ public class Administracion extends JFrame {
 		JButton btnNewButton_1 = new JButton("Ver");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "segundos");
+				JOptionPane.showMessageDialog(null, "Tiempo de espera en la salida: " + LQueue.promedioSalida +" minutos.");
 			}
 		});
 		btnNewButton_1.setBounds(658, 183, 89, 23);
@@ -87,7 +90,7 @@ public class Administracion extends JFrame {
 		JButton btnVer = new JButton("Ver");
 		btnVer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Total de personas\n\nEconomico:  a \nOro:  a \nPlatino:  a \nPreferencial:  a");
+				JOptionPane.showMessageDialog(null,"Total de personas por tipo de plan: \n\nEconomico:" + contadorEconomico +  " personas \nOro:" + contadorOro + " personas \nPlatino:" + contadorPlatino + " personas \nPreferencial:" + contadorPreferencial +" personas");
 			}
 		});
 		btnVer.setBounds(658, 242, 89, 23);
@@ -97,13 +100,53 @@ public class Administracion extends JFrame {
 		lblVerTotal.setBounds(542, 273, 330, 14);
 		contentPane.add(lblVerTotal);
 		
+		JComboBox<Object> comboBox_3 = new JComboBox();
+		comboBox_3.setBounds(703, 298, 109, 20);
+		contentPane.add(comboBox_3);
+		
 		JButton btnNewButton_2 = new JButton("Ver");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null,"sad = " + puertas_PlanLealtad[0] + "asd =" + puertas_PlanLealtad[1] + "qwe = " + puertas_PlanLealtad[2]);
+				String mensajeJOPTION = null;
+				String vuelo = (String)comboBox_3.getSelectedItem();								//Destino seleccionado por el usuario para ver la cantidad de personas atendidas segun puerta
+				String[] asientos_0 = buscarVuelos(puertasOro, vuelo,contadorOro);				//Extrae todos los asientos segun la puerta de las personas atendidas segun el plan de lealtad
+				String[] asientos_1 = buscarVuelos(puertasPlatinos, vuelo,contadorPlatino);
+				String[] asientos_2 = buscarVuelos(puertasPreferenciales, vuelo,contadorPreferencial);
+				String[] asientos_3 = buscarVuelos(puertasEconomicos, vuelo,contadorEconomico);
+				String asientosMensaje = "";
+				int indice = 0;
+				int contadorPersonas_0 = Integer.parseInt(asientos_0[90]);
+				
+				while(indice < contadorPersonas_0) {
+					asientosMensaje = asientosMensaje+ asientos_0[indice] +", ";			//Busca en cada plan las personas que tienen el destino de la combobox_3
+					indice++;
+				}
+				
+				int contadorPersonas_1 = Integer.parseInt(asientos_1[90]);					//Se genera un contador para cada plan
+				
+				while(indice < contadorPersonas_1) {
+					asientosMensaje = asientosMensaje+ asientos_1[indice] +", ";
+					indice++;
+				}
+				
+				int contadorPersonas_2 = Integer.parseInt(asientos_2[90]);
+				
+				while(indice < contadorPersonas_2) {
+					asientosMensaje = asientosMensaje+ asientos_2[indice] +", ";
+					indice++;
+				}
+				
+				int contadorPersonas_3 = Integer.parseInt(asientos_3[90]);
+				
+				while(indice < contadorPersonas_3) {
+					asientosMensaje = asientosMensaje+ asientos_3[indice] +", ";
+					indice++;
+				}
+				mensajeJOPTION = "\n\nCantidad de personas: "+ (contadorPersonas_0 + contadorPersonas_1 + contadorPersonas_2 + contadorPersonas_3);			//Se suman la cantidad de personas encontradas por plan para hacer un global.
+				JOptionPane.showMessageDialog(null, vuelo + mensajeJOPTION);
 			}
 		});
-		btnNewButton_2.setBounds(658, 296, 89, 23);
+		btnNewButton_2.setBounds(588, 296, 89, 23);
 		contentPane.add(btnNewButton_2);
 		
 		JLabel lblVerTotal_1 = new JLabel("5. Ver total de personas atentidas por cola de salida");
@@ -113,7 +156,7 @@ public class Administracion extends JFrame {
 		JButton btnVer_1 = new JButton("Ver");
 		btnVer_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "asd");
+				JOptionPane.showMessageDialog(null, "Cola de salida: \n" + "Cantidad de personas: " + (colaSalidas.getSize() - contadorPreferencial));
 			}
 		});
 		btnVer_1.setBounds(658, 345, 89, 23);
@@ -325,6 +368,16 @@ public class Administracion extends JFrame {
 		});
 		btnModificar_2.setBounds(398, 254, 109, 23);
 		contentPane.add(btnModificar_2);
+		
+		JButton btnNewButton_4 = new JButton("Actualizar");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				agregarTodosVuelos(comboBox_3,listaVuelos);
+			}
+		});
+		btnNewButton_4.setBounds(647, 68, 109, 23);
+		contentPane.add(btnNewButton_4);
+		
 	}
 	//Metodo para agregar vuelos a los comboBox
 		public void agregarVuelos(JComboBox<Object> comboBox,String[] listaVuelos, JTextField[] listaPuertas, int tipoUsuario) {
@@ -336,7 +389,16 @@ public class Administracion extends JFrame {
 				indice++;		
 			}	
 		}
-		//funcion para buscar un vuelo especifico en el arreglo de puertas de tipo de usuario, retornando una lista de asientos encontrados
+		
+	//Metodo para agregar todos los vuelos
+				public void agregarTodosVuelos(JComboBox<Object> comboBox, String[] listaVuelos) {
+					int indice = 0;
+					while (indice < listaVuelos.length) {
+						comboBox.addItem(listaVuelos[indice]);
+						indice++;
+					}
+				}
+	//funcion para buscar un vuelo especifico en el arreglo de puertas de tipo de usuario, retornando una lista de asientos encontrados
 		public String[] buscarVuelos(Puertas[] listaPuertas, String U_vuelo, int contadorPersonas) {
 			String[] listaAsientos = new String[99]; //inicializando la lista de asientos que retornara esta funcion 
 			int indiceListaAsientos = 0;

@@ -1,6 +1,8 @@
 package tecPlane;
 
 import java.time.LocalDateTime;
+
+import estructurasDatos.LQueue;
 import tecPlane.Modulos;
 
 public class Persona {
@@ -79,7 +81,7 @@ public class Persona {
 	}
 	
 	public void setHoraIngreso(int horaIngreso) {
-		this.horaIngreso = Modulos.obtenerHora();
+		this.horaIngreso = LQueue.obtenerHora();
 	}
 	
 	public boolean getPreferencial() {
